@@ -1,6 +1,6 @@
 ---
 - name: Unblock IP address
-  hosts: manageNode
+  hosts: servers
   become: true
 
   tasks:
