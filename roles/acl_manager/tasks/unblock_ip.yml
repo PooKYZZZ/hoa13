@@ -1,0 +1,33 @@
+---
+- name: Ensure Firewall is Installed
+  apt:
+    name: ufw
+    state: present
+
+- name: Install Curl for Validation
+  apt:
+    name: curl
+    state: present
+
+- name: Get UFW status
+  command: ufw status numbered
+  register: ufw_rules
+  changed_when: false
+  become: yes
+
+- name: Debug all rules
+  debug:
+    var: ufw_rules.stdout_lines
+
+- name: Find rule index for the blocked ip
+  set_fact:
+    rule_index: "{{ item.split(']')[0].strip('[') }}"
+  with_items: "{{ ufw_rules.stdout_lines }}"
+  when: "'192.168.56.12' in item"
+  register: matched_rules
+
+- name: Delete matching UFW rules
+  shell: echo y | ufw delete {{ item.ansible_facts.rule_index }}
+  with_items: "{{ matched_rules.results }}"
+  when: item.ansible_facts.rule_index is defined
+  become: yes
