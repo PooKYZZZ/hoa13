@@ -1,0 +1,10 @@
+---
+- name: Block IP address
+  hosts: manageNode
+  become: true
+
+  tasks:
+  - name: Block IP using acl_manager
+    include_role:
+      name: acl_manager
+      tasks_from: block_ip
