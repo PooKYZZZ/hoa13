@@ -12,7 +12,7 @@
 - name: Create a new Firewall rule for IP blocking
   ufw:
     rule: deny
-    from: 192.168.56.12
+    from: 192.168.111.132
     port: 80
     proto: tcp
 
