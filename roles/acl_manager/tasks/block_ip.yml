@@ -1,0 +1,20 @@
+---
+- name: Ensure Firewall is installed
+  apt:
+    name: ufw
+    state: present
+
+- name: Install Curl for Validation
+  apt:
+    name: curl
+    state: present
+
+- name: Create a new Firewall rule for IP blocking
+  ufw:
+    rule: deny
+    from: 192.168.56.12
+    port: 80
+    proto: tcp
+
+- name: Reload Firewall for new rule to take effect
+  shell: sudo ufw reload
